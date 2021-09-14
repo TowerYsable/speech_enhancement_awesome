@@ -79,9 +79,13 @@ https://github.com/topics/beamforming
               * polar coordinate-wise complex-valued masking  
               * a novel loss function, weighted source-to-distortion ratio (wSDR) loss  
       * 论文中的附录：
-           * 实数值卷积和复数值卷积
+           * **实数值卷积和复数值卷积**，因为实部和虚部都很重要呀
+           * **是否有限制的mark组合相位和幅度**，tanh的有限制更好
+           * **Loss**
         * code:[Phase-aware Speech Enhancement with Deep Complex U-Net | Papers With Code](https://paperswithcode.com/paper/phase-aware-speech-enhancement-with-deep-1)
   * 2020, Learning Complex Spectral Mapping With GatedConvolutional Recurrent Networks forMonaural Speech Enhancement, [Tan](https://github.com/JupiterEthan). [[Paper]](https://web.cse.ohio-state.edu/~wang.77/papers/Tan-Wang.taslp20.pdf) [[GCRN]](https://github.com/JupiterEthan/GCRN-complex)
+        * 可视化：相位谱+平滑 vs 非平滑
+        * Gated
   * 2020, DCCRN: Deep Complex Convolution Recurrent Network for Phase-AwareSpeech Enhancement, [Hu](https://github.com/huyanxin). [[Paper]](https://isca-speech.org/archive/Interspeech_2020/pdfs/2537.pdf) [[DCCRN]](https://github.com/huyanxin/DeepComplexCRN)
   * 2020, T-GSA: Transformer with Gaussian-Weighted Self-Attention for Speech Enhancement, Kim. [[Paper]](https://ieeexplore.ieee.org/document/9053591) 
   * 2020, Phase-aware Single-stage Speech Denoising and Dereverberation with U-Net, Choi. [[Paper]](https://arxiv.org/abs/2006.00687)

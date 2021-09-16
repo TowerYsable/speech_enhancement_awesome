@@ -41,7 +41,12 @@ https://github.com/topics/beamforming
   * 2020, Online Monaural Speech Enhancement using Delayed Subband LSTM, Li. [[Paper]](https://isca-speech.org/archive/Interspeech_2020/pdfs/2091.pdf)
   * 2020, FullSubNet: A Full-Band and Sub-Band Fusion Model for Real-Time Single-Channel Speech Enhancement, [Hao](https://github.com/haoxiangsnr). [[Paper]](https://arxiv.org/pdf/2010.15508.pdf) [[FullSubNet]](https://github.com/haoxiangsnr/FullSubNet)
 
-  ### Complex domain
+### new
+
+- [2106.15813.pdf (arxiv.org)](https://arxiv.org/pdf/2106.15813.pdf)
+
+### Complex domain
+
   * 2017, Complex spectrogram enhancement by convolutional neural network with multi-metrics learning, [Fu](https://github.com/JasonSWFu). [[Paper]](https://arxiv.org/pdf/1704.08504.pdf)
       * 提出：**大家都搞相位和幅度，我搞实部虚部**
           * 过去很多研究只用到了幅度谱，但是相位谱也很重要
@@ -87,6 +92,10 @@ https://github.com/topics/beamforming
         * 可视化：相位谱+平滑 vs 非平滑
         * Gated
   * 2020, DCCRN: Deep Complex Convolution Recurrent Network for Phase-AwareSpeech Enhancement, [Hu](https://github.com/huyanxin). [[Paper]](https://isca-speech.org/archive/Interspeech_2020/pdfs/2537.pdf) [[DCCRN]](https://github.com/huyanxin/DeepComplexCRN)
+        * 参考模块
+              * ConvSTFT
+              * complex convolution
+              * SI-SNR
   * 2020, T-GSA: Transformer with Gaussian-Weighted Self-Attention for Speech Enhancement, Kim. [[Paper]](https://ieeexplore.ieee.org/document/9053591) 
   * 2020, Phase-aware Single-stage Speech Denoising and Dereverberation with U-Net, Choi. [[Paper]](https://arxiv.org/abs/2006.00687)
 
@@ -268,3 +277,4 @@ https://github.com/topics/beamforming
 * Speech Signal Processing Course(ZH) [[Link]](https://github.com/veenveenveen/SpeechSignalProcessingCourse)
 * Speech Algorithms(ZH) [[Link]](https://github.com/Ryuk17/SpeechAlgorithms)
 * CCF语音对话与听觉专业组语音对话与听觉前沿研讨会(ZH) [[Link]](https://www.bilibili.com/video/BV1MV411k7iJ)
+

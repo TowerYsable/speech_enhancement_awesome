@@ -99,7 +99,14 @@ https://github.com/topics/beamforming
   * 2020, T-GSA: Transformer with Gaussian-Weighted Self-Attention for Speech Enhancement, Kim. [[Paper]](https://ieeexplore.ieee.org/document/9053591) 
   * 2020, Phase-aware Single-stage Speech Denoising and Dereverberation with U-Net, Choi. [[Paper]](https://arxiv.org/abs/2006.00687)
 
+### attention
+
+- 2020,[[2002.05873\] Speech Enhancement using Self-Adaptation and Multi-Head Self-Attention (arxiv.org)](https://arxiv.org/abs/2002.05873
+- 2020,[[2009.01941\] Dense CNN with Self-Attention for Time-Domain Speech Enhancement (arxiv.org)](https://arxiv.org/abs/2009.01941)
+- 2019,[Sci-Hub | [IEEE ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) - Brighton, United Kingdom (2019.5.12-2019.5.17)\] ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) - An Attention-based Neural Network Approach for Single Channel Speech Enhancement | 10.1109/ICASSP.2019.8683169](https://www.sci-hub.ren/10.1109/icassp.2019.8683169)
+
   ### Time domain
+
   * 2018, Improved Speech Enhancement with the Wave-U-Net, Macartney. [[Paper]](https://arxiv.org/pdf/1811.11307.pdf) [[WaveUNet]](https://github.com/YosukeSugiura/Wave-U-Net-for-Speech-Enhancement-NNabla) 
   * 2019, A New Framework for CNN-Based Speech Enhancement in the Time Domain, [Pandey](https://github.com/ashutosh620). [[Paper]](https://ieeexplore.ieee.org/document/8701652) 
   * 2019, TCNN: Temporal Convolutional Neural Network for Real-time Speech Enhancement in the Time Domain, [Pandey](https://github.com/ashutosh620). [[Paper]](https://ieeexplore.ieee.org/document/8683634)

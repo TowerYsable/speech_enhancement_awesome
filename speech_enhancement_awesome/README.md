@@ -105,6 +105,24 @@ https://github.com/topics/beamforming
 - 2020,[[2009.01941\] Dense CNN with Self-Attention for Time-Domain Speech Enhancement (arxiv.org)](https://arxiv.org/abs/2009.01941)
 - 2019,[Sci-Hub | [IEEE ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) - Brighton, United Kingdom (2019.5.12-2019.5.17)\] ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) - An Attention-based Neural Network Approach for Single Channel Speech Enhancement | 10.1109/ICASSP.2019.8683169](https://www.sci-hub.ren/10.1109/icassp.2019.8683169)
 
+### loss
+
+- [[1909.01019\] On Loss Functions for Supervised Monaural Time-Domain Speech Enhancement (arxiv.org)](https://arxiv.org/abs/1909.01019)
+
+- [[2005.11611\] Exploring the Best Loss Function for DNN-Based Low-latency Speech Enhancement with Temporal Convolutional Networks (arxiv.org)](https://arxiv.org/abs/2005.11611)
+
+  > [Performance comparison evaluation of speech enhancement using various loss functions -The Journal of the Acoustical Society of Korea | Korea Science](http://koreascience.or.kr/article/JAKO202113150644115.page)
+  >
+  > [sorenchiron/Awesome-Speech-Enhancement - githubmemory](https://githubmemory.com/repo/sorenchiron/Awesome-Speech-Enhancement)
+
+- [Sci-Hub | Learning with Learned Loss Function: Speech Enhancement with Quality-Net to Improve Perceptual Evaluation of Speech Quality | 10.1109/LSP.2019.2953810](https://www.sci-hub.ren/10.1109/LSP.2019.2953810)
+
+- [[1811.02508\] SDR - half-baked or well done? (arxiv.org)](https://arxiv.org/abs/1811.02508)
+
+  - code:[mitmedialab/WetlandAvianSourceSeparation (github.com)](https://github.com/mitmedialab/WetlandAvianSourceSeparation)
+
+- 
+
   ### Time domain
 
   * 2018, Improved Speech Enhancement with the Wave-U-Net, Macartney. [[Paper]](https://arxiv.org/pdf/1811.11307.pdf) [[WaveUNet]](https://github.com/YosukeSugiura/Wave-U-Net-for-Speech-Enhancement-NNabla) 

@@ -20,8 +20,6 @@ https://github.com/topics/beamforming
 ## Speech_Enhancement
   ### Magnitude spectrogram
 
-
-
   #### spectral masking
   * 2014, On Training Targets for Supervised Speech Separation, Wang. [[Paper]](https://ieeexplore.ieee.org/document/6887314)  
   * 2018, A Hybrid DSP/Deep Learning Approach to Real-Time Full-Band Speech Enhancement, [Valin](https://github.com/jmvalin). [[Paper]](https://ieeexplore.ieee.org/document/8547084/) [[RNNoise]](https://github.com/xiph/rnnoise) [[RNNoise16k]](https://github.com/YongyuG/rnnoise_16k)
@@ -41,9 +39,7 @@ https://github.com/topics/beamforming
   * 2020, Online Monaural Speech Enhancement using Delayed Subband LSTM, Li. [[Paper]](https://isca-speech.org/archive/Interspeech_2020/pdfs/2091.pdf)
   * 2020, FullSubNet: A Full-Band and Sub-Band Fusion Model for Real-Time Single-Channel Speech Enhancement, [Hao](https://github.com/haoxiangsnr). [[Paper]](https://arxiv.org/pdf/2010.15508.pdf) [[FullSubNet]](https://github.com/haoxiangsnr/FullSubNet)
 
-### new
-
-- [2106.15813.pdf (arxiv.org)](https://arxiv.org/pdf/2106.15813.pdf)
+- https://arxiv.org/pdf/2106.15813.pdf)
 
 ### Complex domain
 
@@ -102,12 +98,32 @@ https://github.com/topics/beamforming
 ### attention
 
 - 2020,[[2002.05873\] Speech Enhancement using Self-Adaptation and Multi-Head Self-Attention (arxiv.org)](https://arxiv.org/abs/2002.05873
+  - 方法：
+    - 加上了speaker特征，未知说话者（generalization  vs ）
+      - 使用辅助的向量
+      - 或者直接使用自注意力进行抽取
+    - 多任务学习Loss
+  - 说话者的特征信息或许可以参考语音合成
+  - 数据集：VoiceBank-DEMAND   
 - 2020,[[2009.01941\] Dense CNN with Self-Attention for Time-Domain Speech Enhancement (arxiv.org)](https://arxiv.org/abs/2009.01941)
+  - DCN with attention
+  - **with a loss** based on the spectral magnitude of enhanced speech.  
+  - **Causal convolution  ： real-time** vs Non-Causal 
 - 2019,[Sci-Hub | [IEEE ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) - Brighton, United Kingdom (2019.5.12-2019.5.17)\] ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) - An Attention-based Neural Network Approach for Single Channel Speech Enhancement | 10.1109/ICASSP.2019.8683169](https://www.sci-hub.ren/10.1109/icassp.2019.8683169)
+  - local causal attention
+  - 可视化attention对齐
+- [Sci-Hub | Monaural Speech Dereverberation Using Temporal Convolutional Networks with Self Attention | 10.1109/TASLP.2020.2995273 (hkvisa.net)](https://sci-hubtw.hkvisa.net/10.1109/TASLP.2020.2995273)
+  - 使用自注意力机制进行去混响
+- [Sci-Hub | [IEEE 2019 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics (WASPAA) - New Paltz, NY, USA (2019.10.20-2019.10.23)\] 2019 IEEE Workshop on Applications of Signal Processing to Audio and Acoustics (WASPAA) - Attention Wave-U-Net for Speech Enhancement | 10.1109/WASPAA.2019.8937186 (hkvisa.net)](https://sci-hubtw.hkvisa.net/10.1109/WASPAA.2019.8937186)
+  - We observe that the final layer attention mask has an interpretation as a soft Voice Activity Detector   
+  - time domain UNet-wave
+- DF-CONFORMER：[2106.15813.pdf (arxiv.org)](https://arxiv.org/pdf/2106.15813.pdf)
 
 ### loss
 
 - [[1909.01019\] On Loss Functions for Supervised Monaural Time-Domain Speech Enhancement (arxiv.org)](https://arxiv.org/abs/1909.01019)
+
+  - 
 
 - [[2005.11611\] Exploring the Best Loss Function for DNN-Based Low-latency Speech Enhancement with Temporal Convolutional Networks (arxiv.org)](https://arxiv.org/abs/2005.11611)
 
@@ -117,13 +133,16 @@ https://github.com/topics/beamforming
 
 - [Sci-Hub | Learning with Learned Loss Function: Speech Enhancement with Quality-Net to Improve Perceptual Evaluation of Speech Quality | 10.1109/LSP.2019.2953810](https://www.sci-hub.ren/10.1109/LSP.2019.2953810)
 
+  - Quality-Net  
+
 - [[1811.02508\] SDR - half-baked or well done? (arxiv.org)](https://arxiv.org/abs/1811.02508)
 
   - code:[mitmedialab/WetlandAvianSourceSeparation (github.com)](https://github.com/mitmedialab/WetlandAvianSourceSeparation)
+  - SI-SAR  SI-SIR
 
-- 
+  
 
-  ### Time domain
+### Time domain
 
   * 2018, Improved Speech Enhancement with the Wave-U-Net, Macartney. [[Paper]](https://arxiv.org/pdf/1811.11307.pdf) [[WaveUNet]](https://github.com/YosukeSugiura/Wave-U-Net-for-Speech-Enhancement-NNabla) 
   * 2019, A New Framework for CNN-Based Speech Enhancement in the Time Domain, [Pandey](https://github.com/ashutosh620). [[Paper]](https://ieeexplore.ieee.org/document/8701652) 

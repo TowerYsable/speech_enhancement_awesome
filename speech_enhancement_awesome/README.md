@@ -138,9 +138,17 @@ https://github.com/topics/beamforming
 - [[1811.02508\] SDR - half-baked or well done? (arxiv.org)](https://arxiv.org/abs/1811.02508)
 
   - code:[mitmedialab/WetlandAvianSourceSeparation (github.com)](https://github.com/mitmedialab/WetlandAvianSourceSeparation)
-  - SI-SAR  SI-SIR
-
   
+  - SI-SAR  SI-SIR
+  
+- [2102.05109.pdf (arxiv.org)](https://arxiv.org/pdf/2102.05109.pdf)
+  
+  - contrastive learning:[pranaymanocha/PerceptualAudio: Perceptual Metrics of Audio - perceptually relevant loss function. DPAM and CDPAM (github.com)](https://github.com/pranaymanocha/PerceptualAudio)
+  - [2001.04460.pdf (arxiv.org)](https://arxiv.org/pdf/2001.04460.pdf)
+
+- [Sci-Hub | A Deep Learning Loss Function Based on the Perceptual Evaluation of the Speech Quality | 10.1109/LSP.2018.2871419 (hkvisa.net)](https://sci-hubtw.hkvisa.net/10.1109/LSP.2018.2871419)
+  - [Perceptual metric for speech quality evaluation (PMSQE): Source code and audio examples (ugr.es)](http://sigmat.ugr.es/PMSQE/)
+
 
 ### Time domain
 

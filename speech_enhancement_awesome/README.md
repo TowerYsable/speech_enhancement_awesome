@@ -147,6 +147,7 @@ https://github.com/topics/beamforming
   - [2001.04460.pdf (arxiv.org)](https://arxiv.org/pdf/2001.04460.pdf)
 
 - [Sci-Hub | A Deep Learning Loss Function Based on the Perceptual Evaluation of the Speech Quality | 10.1109/LSP.2018.2871419 (hkvisa.net)](https://sci-hubtw.hkvisa.net/10.1109/LSP.2018.2871419)
+  
   - [Perceptual metric for speech quality evaluation (PMSQE): Source code and audio examples (ugr.es)](http://sigmat.ugr.es/PMSQE/)
 
 

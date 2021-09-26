@@ -11,6 +11,7 @@
 - 特征：FBank、MFCC（GCC、SCM）、Gammatone谱、目标幅度谱TMS、LPS（Log-power Spectral）
   - Gammatone 是模拟人耳耳蜗滤波后的特征，通常还会继续执行对数操作以便压缩参数的范围，这样也会更加符合人耳的听觉效应。
   - 短时傅里叶变换幅度谱、对数功率谱以及梅尔谱都可以作为 TMS 预测的特征，在不考虑相位的情况下，直接将带噪语音的相位与增强幅度谱相乘生成增强语音的时域波形。
+- causal vs Non-causal
 
 ## 一、 基础方法
 
@@ -32,9 +33,20 @@
   - 信号近似，Signal Approximation, SA  
     - 结合了时频掩蔽和特征映射算法的优点，将掩蔽和目标幅度谱同时作为训练目标
 
+> - 模型：DNN-RNN-CNN-GAN-transformer
+>
+> - 训练目标：
+>   - Masking：IBM-IRM-PSM-CRM
+>   - Mapping：Spectral magnitude - complex spectral - waveform
+
+- 多通道：
+  - 空间滤波：利用声源定位
+  - 盲源分离：利用声援之间的独立性，麦克风数需大于声源个数，混响条件下性能会下降
+  - 计算听觉场景分析：模拟人类听觉系统
+
 ### 1.1 维纳滤波
 
-![image-20210924224901160](readme_detail.assets/image-20210924224901160.png)
+<img src="readme_detail.assets/image-20210924224901160.png" alt="image-20210924224901160" style="zoom:50%;" />
 
 - 基于语音和噪声统计独立性，使用MMSE准则进行降噪。
   
@@ -62,7 +74,7 @@
 
 ### 1.2 子空间法
 
-![image-20210925101656126](readme_detail.assets/image-20210925101656126.png)
+<img src="readme_detail.assets/image-20210925101656126.png" alt="image-20210925101656126" style="zoom: 50%;" />
 
 - 本质：本质事寻找一个H能够将含噪信号y映射成干净的信号x(推导见《2.语音增强子空间法》)，核心思想史将带噪信号看作一个向量空间，则纯净语音的信号和噪声信号就可以被看作它内部的两个正交子空间。
 - 参考论文：Hu, Y. and Loizou, P. (2003). A generalized subspace approach for enhancing speech corrupted by colored noise. IEEE Trans. on Speech and Audio Processing, 11, 334-341  
@@ -70,7 +82,7 @@
 
 ### 1.3 谱减法
 
-![image-20210926100021168](readme_detail.assets/image-20210926100021168.png)
+<img src="readme_detail.assets/image-20210926100021168.png" alt="image-20210926100021168" style="zoom:50%;" />
 
 - 推导见《3.specsub推导》
 - 具体步骤：
@@ -92,11 +104,11 @@
 
 ### 1.4 MMSEE（计算和推导复杂）
 
-![image-20210925105309373](readme_detail.assets/image-20210925105309373.png)
+<img src="readme_detail.assets/image-20210925105309373.png" alt="image-20210925105309373" style="zoom:50%;" />
 
 - 最小均方误差估计（Minimum Mean Square Error Estimation）  
 
-![image-20210925105634721](readme_detail.assets/image-20210925105634721.png)
+<img src="readme_detail.assets/image-20210925105634721.png" alt="image-20210925105634721" style="zoom:50%;" />
 
 - 优缺点：
   - 是一种非线性的估计，语音失真程度最低，但是在高信噪比条件下性能不佳
@@ -105,7 +117,7 @@
 
 基于深度学习的方法：
 
-![image-20210926102629637](readme_detail.assets/image-20210926102629637.png)
+<img src="readme_detail.assets/image-20210926102629637.png" alt="image-20210926102629637" style="zoom:50%;" />
 
 ### 1.5 DNN频谱映射
 
@@ -113,7 +125,7 @@
 
 ### 1.6 DNN-IRM
 
-![image-20210925122320974](readme_detail.assets/image-20210925122320974.png)
+<img src="readme_detail.assets/image-20210925122320974.png" alt="image-20210925122320974" style="zoom:50%;" />
 
 ### 1.7 GAN
 
@@ -128,6 +140,9 @@
 
 ## 四、 loss
 
+- MSE
+- SDR
+- PESQ/STOI
 - PASE特征损失
 
 ## 五、 评价指标
@@ -136,7 +151,7 @@
 
   - MOS，Mean Opinion Score。MOS 评定方法是让测试者都处在相同的环境中，根据事先指定的评价标准来对听到的测试语音进行打分。MOS 得分范围可以分为五个等级，语音的质量越高，等级也就越高。
 
-    <img src="readme_detail.assets/image-20210926113838225.png" alt="image-20210926113838225" style="zoom:50%;" />
+    <img src="readme_detail.assets/image-20210926113838225.png" alt="image-20210926113838225" style="zoom: 67%;" />
 
 - 客观评价指标
 
@@ -163,8 +178,10 @@
   - 训练评价指标网络的实验**从 TIMIT 训练集中随机选取 200 句纯净语音作为训练语句，从TIMIT 测试集中选取 100 句做测试语音**。从 NoiseX92 噪声数据库中的全部 15 种噪声来参与训练，在 21 个信噪比的条件下（-10 dB~10 dB，1 dB 的步长）和噪声混合来合成带噪语音，一共 63000 条（200 语句 * 15  Noise * 21 SNR）混合语句。
   - 为了更具有挑战性的实验条件，每个句子只在一个信噪比水平上被一个噪声类型破坏，因此所有的训练数据都是独一无二的，以便学习不同语音条件的评估映射功能。将这批带噪语音通过本文提前训练好的语音增强模型增强，得到的降噪语音与对应的纯净语音一起作为**训练集**。**测试集**中的 100 句纯净语音分别与 5 种噪声进行合成，这 5 种噪声分别为背景交谈噪声（Babble Noise），驱逐舰作战室背景噪音（Destroyerops Noise），工厂车间噪声（Factory Noise1），粉红噪声（Pink Noise），白噪声（White Noise），在 5 个信噪比（-10 dB、-5dB、0 dB，5 dB 和 10 dB）的条件下合成带噪语音，得到 2500 句（100 * 5 Noise * 5 SNR）混合语句，每条纯净语音只在一个信噪比水平上被一个噪声类型破坏。
 - THCHS-30+NOISE92
+- 10K non-speech noises(www.sound-ideas.com)
+- DNS challenge
 
-## 参考论文及其链接
+## 参考论文
 
 - [x] 1 基于评价指标网络的语音增强优化研究（多目标）
 
@@ -216,4 +233,10 @@
   > [Andong-Li-speech/RTNet: implementation of Monaural Speech Enhancement with Recursive Learning in the Time Domain (github.com)](https://github.com/Andong-Li-speech/RTNet)
   >
   > [Andong-Li-speech (AndongLi) / Repositories (github.com)](https://github.com/Andong-Li-speech?tab=repositories)
+
+## 参考链接
+
+- Matlab实现：[PandoraLS/traditional-speech-enhancement: 语音增强传统方法 (github.com)](https://github.com/PandoraLS/traditional-speech-enhancement)
+- [语音增强国外牛人_audio_algorithm的博客-CSDN博客](https://blog.csdn.net/audio_algorithm/article/details/79114020)
+- 视频：[视频回放丨AI技术沙龙—语音增强 (qq.com)](https://mp.weixin.qq.com/s/TUSBZXCm0M0-lYZYgCttWg)
 

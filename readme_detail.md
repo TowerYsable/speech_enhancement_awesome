@@ -149,7 +149,7 @@
 
     - estimating clean real and imaginary (RI) spectrograms from noisy ones.
 
-    - 从不同的channel进行实部和虚部的计算。Rather than processing the phase directly, the network aims to estimate clean RI spectrograms from  noisy ones.   
+    - 从不同的channel进行实部和虚部的计算。Rather than processing the phase directly, the network aims to estimate clean RI spectrograms from  noisy ones. 
 
       <img src="readme_detail.assets/image-20210927104059377.png" alt="image-20210927104059377" style="zoom: 50%;" />  
 
@@ -189,7 +189,248 @@
 - 实验：
   - 针对混响，using simulated and real room   
 
+### 2.3
+
+- 2019, PHASEN: A Phase-and-Harmonics-Aware Speech Enhancement Network, Yin. [[Paper]](https://arxiv.org/abs/1911.04697) [[PHASEN]](https://github.com/huyanxin/phasen)
+
+- 问题
+
+  - <img src="readme_detail.assets/image-20210927150452116.png" alt="image-20210927150452116" style="zoom:50%;" />
+
+  - 使用双流网络，而不是cIRM，其实就是换成了相位预测、幅度预测、通过谐波去重构phase。
+
+    <img src="readme_detail.assets/image-20210927150623530.png" alt="image-20210927150623530" style="zoom: 50%;" />
+
+      * 两个流之间有交互，提高相位预测的质量（在上一篇论文中指出，直接使用双流网络去预测相位谱并不可靠，独立的相位预测是不可靠的）
+      * we propose frequency transformation blocks to catch long-range correlations along the frequency axis.  
+      * learned transformation matrix可以捕获**谐波（harmonics）**相关系数，Visualization shows that the learned transformation matrix spontaneously captures the harmonic correlation, which has been proven to be helpful for T-F spectrogram reconstruction.   
+          * **Visualization of FTB weights  ：**to insert frequency transformation blocks (FTBs) to capture global correlations along the frequency axis.
+          * **Two-Stream Architecture**     
+    * The **loss** consists of two parts: amplitude loss La and phase-aware loss Lp.  
+    * 数据集：ACSpeech+AudioSet、Voice Bank+DEMAND
+
+### 2.4
+
+2019, Phase-aware Speech Enhancement with Deep Complex U-Net, Choi. [[Paper]](https://arxiv.org/abs/1903.03107) [[DC-UNet]](https://github.com/chanil1218/DCUnet.pytorch)
+
+![image-20210927151116631](readme_detail.assets/image-20210927151116631.png)
+
+  * 主要思路：之前的工作主要为“使用幅度谱和重构噪声的相位谱”的方式去构造语音增强系统<--噪声的相位谱+去噪语音的幅度谱 --> 去估计纯净语音的相位谱
+  * 解决方法：关于“相位重构困难的问题”
+      * Deep Complex U-Net
+      * polar coordinate-wise complex-valued masking  
+      * a novel loss function, weighted source-to-distortion ratio (wSDR) loss  
+* 论文中的附录：
+  * **实数值卷积和复数值卷积**，因为实部和虚部都很重要呀
+  * **是否有限制的mark组合相位和幅度**，tanh的有限制更好
+  * **Loss**
+  * code:[Phase-aware Speech Enhancement with Deep Complex U-Net | Papers With Code](https://paperswithcode.com/paper/phase-aware-speech-enhancement-with-deep-1)
+
+### 2.5
+
+2020, Learning Complex Spectral **Mapping** With Gated Convolutional Recurrent Networks for Monaural Speech Enhancement, [Tan](https://github.com/JupiterEthan). [[Paper]](https://web.cse.ohio-state.edu/~wang.77/papers/Tan-Wang.taslp20.pdf) [[GCRN]](https://github.com/JupiterEthan/GCRN-complex)
+
+  * 通过幅度和相位直接重构语音是比较困难的，而且相位预测更加困难。
+  * 可视化：相位谱+平滑 vs 非平滑
+  * Gated
+  * CRN：Complex Spectral Mapping with a Convolutional Recurrent Network for Monaural Speech Enhancement，
+
+### 2.6
+
+单通道：[[2105.02436\] DBNet: A Dual-branch Network Architecture Processing on Spectrum and Waveform for Single-channel Speech Enhancement (arxiv.org)](https://arxiv.org/abs/2105.02436)
+
+- [driving-behavior/DBNet: DBNet: A Large-Scale Dataset for Driving Behavior Learning, CVPR 2018 (github.com)](https://github.com/driving-behavior/DBNet)
+
+- **动机：**不同噪声在时域和频域的表现不同
+
+  - 对于冲击信息，时域更合适
+  - 对于单频信号，频域更合适
+
+- 网络结构：同时做时域和频域（Bridge Layer）
+
+- 实验基线：WSJ0
+
+  - CRN，时域，幅度谱，4.5M
+  - GCRN，频域，复数谱，9.67M
+  - AECNN，时域，时频波形，18M
+
+- CRN
+
+  - Unet-like
+  - Estimate real & imaginary spectrum separately
+
+- DCUNET
+
+  - complex convolution
+  - jointly estimate real & imaginary spectrum
+
+- DCCRN
+
+  <img src="readme_detail.assets/image-20210927152051760.png" alt="image-20210927152051760" style="zoom:50%;" />
+
+  - combine the advantage of CRN and DCUnet，as well as meet the small footprint and low-latency requirement
+
+  - unet-structured complex-valued network with LSTM to model temporal context
+
+  - 推导：
+
+    - complex-valued convolution filter and inputs can be defined like
+      $$
+      W = W_r + jW_i
+      $$
+
+      $$
+      X = X_r + jX_i
+      $$
+
+    - The convolution can easily  be defined as 
+      $$
+      F = (X_r*W_r-X_i*W_i)+j(X_r*W_i+X_i*W_r)
+      $$
+
+    - similarly,we can get a naive complex LSTM
+      $$
+      F_{rr}=LSTM_r(X_r)
+      $$
+
+      $$
+      F_{ir}=LSTM_r(X_i)
+      $$
+
+      $$
+      F_{ri}=LSTM_i(X_r)
+      $$
+
+      $$
+      F_{ii}=LSTM_i(X_i)
+      $$
+
+      $$
+      F_{out}= (F_{rr}-F_{ii}) + j(F_{ri}-F_{ir})
+      $$
+
+  - complex encoder/decoder
+
+    <img src="readme_detail.assets/image-20210927152107344.png" alt="image-20210927152107344" style="zoom: 50%;" />
+
+    - complex conv2d layer/complex convtransposed2d layer
+    - complex batch normalization layer
+    - real prelu
+
+  - Training target of DCRNN is a Complex ratio mask
+    $$
+    CRM = \frac{Y_rS_r+Y_iS_i}{Y_r^2+Y_i^2}+j\frac{Y_rS_i-Y_iS_r}{Y_r^2+Y_i^2}
+    $$
+
+    - The estimated mask cartesian coordinate representation
+      $$
+      M^e=M^e_r+jM_i^e
+      $$
+
+    - it is also can be expressed in polar coordinates
+      $$
+      M^e_{mag} = \tanh(\sqrt{M_r^{e2} + M_i^{e2}} )
+      $$
+
+      $$
+      M^e_{phase} = \arctan2({M_r^{e} + M_i^{e}} )
+      $$
+
+    - The clean speech can be estimated as
+      $$
+      DCRRN-R
+      $$
+
+      $$
+      DCCRN-C
+      $$
+
+      $$
+      DCCRN-E
+      $$
+
+    - Loss funcation
+      $$
+      Loss = -SISNR(istft(S^e),s)
+      $$
+
+  - Dynamic data augmentation
+
+- DCCRN+
+
+  ![image-20210927152225631](readme_detail.assets/image-20210927152225631.png)
+
+  - subband processing
+
+    - Learnable subband and split and merge moudules to reduce model size and computational cost，实现了降采样的过程，语音里面的低频部分能量比较高（谐波成分比较明显），高频部分的能量比较低，但是是类噪的，因此高频的降噪是具有挑战的
+    - neural network based learnable subband split and merge
+      - split block
+      - merge block
+
+  - **Complex TF-LSTM Block**  --> attention是都能够继续改进 
+
+    <img src="readme_detail.assets/image-20210927152240809.png" alt="image-20210927152240809" style="zoom:50%;" />
+
+    - Modeling frequency domain sequence and time domain sequence
+    - 先频域建模，在时域建模，可见论文模块b
+
+  - Convolution pathway
+
+    - aggregate richer information from encoder output
+
+  - SNR Esinmator
+
+    - SNR estimation as MTL to maintain good speech quality while reducing noise
+    - Problem：directly training neural noise suppressor --> certain amount of speech distortion
+    - solution:add frame-level SNR estimator under MTL framework
+      - network:1 LSTM + 1 Conv1D w/ sigmoid
+      - label
+        - extract the amplitude spectrum after STFT
+        - Calcalate the log energy of noise and speech based on amplitude spectrum
+
+  - post-processing
+
+    - remove residual noise
+
+  - https://imybo.github.io/dccrn-plus
+
+### 2.7 
+
+  * 2020, T-GSA: Transformer with Gaussian-Weighted Self-Attention for Speech Enhancement, Kim. [[Paper]](https://ieeexplore.ieee.org/document/9053591) 
+
+    <img src="readme_detail.assets/image-20210927152523990.png" alt="image-20210927152523990" style="zoom: 50%;" />
+
+    <img src="readme_detail.assets/image-20210927152419642.png" alt="image-20210927152419642" style="zoom:50%;" />
+
+    <img src="readme_detail.assets/image-20210927152433247.png" alt="image-20210927152433247" style="zoom:50%;" />
+
+### 2.8
+
+  * 2020, Phase-aware Single-stage Speech Denoising and Dereverberation with U-Net, Choi. [[Paper]](https://arxiv.org/abs/2006.00687)
+
 ## 三、 attention
+
+### 3.1
+
+2020,[[2002.05873\] Speech Enhancement using Self-Adaptation and Multi-Head Self-Attention (arxiv.org)](https://arxiv.org/abs/2002.05873
+
+![image-20210927154902194](readme_detail.assets/image-20210927154902194.png)
+
+- 方法：
+  - 加上了speaker特征，未知说话者（generalization  vs ）
+    - 使用辅助的向量
+    - 或者直接使用自注意力进行抽取
+  - 多任务学习Loss
+- 说话者的特征信息或许可以参考语音合成
+- 数据集：VoiceBank-DEMAND   
+
+### 3.2 
+
+2020,[[2009.01941\] Dense CNN with Self-Attention for Time-Domain Speech Enhancement (arxiv.org)](https://arxiv.org/abs/2009.01941)
+
+- DCN with attention
+- **with a loss** based on the spectral magnitude of enhanced speech.  
+- **Causal convolution  ： real-time** vs Non-Causal 
 
 ## 四、 loss
 

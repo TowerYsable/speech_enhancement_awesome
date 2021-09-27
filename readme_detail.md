@@ -11,9 +11,12 @@
 - 特征：FBank、MFCC（GCC、SCM）、Gammatone谱、目标幅度谱TMS、LPS（Log-power Spectral）
   - Gammatone 是模拟人耳耳蜗滤波后的特征，通常还会继续执行对数操作以便压缩参数的范围，这样也会更加符合人耳的听觉效应。
   - 短时傅里叶变换幅度谱、对数功率谱以及梅尔谱都可以作为 TMS 预测的特征，在不考虑相位的情况下，直接将带噪语音的相位与增强幅度谱相乘生成增强语音的时域波形。
-- causal vs Non-causal
+- causal vs Non-causal，real-time vs non-real-time
+- 宽带 vs 超宽带
 
 ## 一、 基础方法
+
+![微信截图_20210926160438](readme_detail.assets/微信截图_20210926160438.png)
 
 主要分为传统的语音增强算法和基于深度学习 的语音增强算法
 
@@ -119,7 +122,7 @@
 
 <img src="readme_detail.assets/image-20210926102629637.png" alt="image-20210926102629637" style="zoom:50%;" />
 
-### 1.5 DNN频谱映射
+### 1.5 DNN频谱映射Mapping
 
 <img src="readme_detail.assets/image-20210925111312301.png" alt="image-20210925111312301" style="zoom:50%;" />
 
@@ -133,7 +136,7 @@
 
 ## 二、 complex domain
 
-- 过去：只对语音的幅值谱进行了处理而忽略了相位的作用。  
+- 过去：只对语音的幅值谱进行了处理而忽略了相位的作用。  早期主要是使用幅度谱，重构语音信号的时候使用的是噪声的相位谱。从而使语音增强的性能存在一定的上限，但是相位的建模确实是具有挑战性的，难以直接预测出纯净语音的相位谱。
 - encoder-decoder：在保证帧与帧之间独立的同时又可以提取到相邻频点之间的特征信息  
 
 ## 三、 attention
@@ -179,7 +182,20 @@
   - 为了更具有挑战性的实验条件，每个句子只在一个信噪比水平上被一个噪声类型破坏，因此所有的训练数据都是独一无二的，以便学习不同语音条件的评估映射功能。将这批带噪语音通过本文提前训练好的语音增强模型增强，得到的降噪语音与对应的纯净语音一起作为**训练集**。**测试集**中的 100 句纯净语音分别与 5 种噪声进行合成，这 5 种噪声分别为背景交谈噪声（Babble Noise），驱逐舰作战室背景噪音（Destroyerops Noise），工厂车间噪声（Factory Noise1），粉红噪声（Pink Noise），白噪声（White Noise），在 5 个信噪比（-10 dB、-5dB、0 dB，5 dB 和 10 dB）的条件下合成带噪语音，得到 2500 句（100 * 5 Noise * 5 SNR）混合语句，每条纯净语音只在一个信噪比水平上被一个噪声类型破坏。
 - THCHS-30+NOISE92
 - 10K non-speech noises(www.sound-ideas.com)
-- DNS challenge
+- DNS challenge（microsoft）
+  - Real-time track
+  - Non Real-time track
+- MUSAN：[openslr.org](http://www.openslr.org/17/)
+
+## idea
+
+- 会议中，存在的问题：（不同的loss）
+  - 突发噪声：键盘、鼠标、桌子放水杯等、手机震动、打哈欠、咳嗽、微信语音提示声等
+  - 语音保真度高，避免语音被抑制
+  - 各种平稳噪声进和非平稳突发噪声消除
+  - 针对不同的场景
+- DCCRN
+  - 过度抑制
 
 ## 参考论文
 

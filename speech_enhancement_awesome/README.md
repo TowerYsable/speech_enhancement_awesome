@@ -84,9 +84,10 @@ https://github.com/topics/beamforming
            * **是否有限制的mark组合相位和幅度**，tanh的有限制更好
            * **Loss**
         * code:[Phase-aware Speech Enhancement with Deep Complex U-Net | Papers With Code](https://paperswithcode.com/paper/phase-aware-speech-enhancement-with-deep-1)
-  * 2020, Learning Complex Spectral Mapping With GatedConvolutional Recurrent Networks forMonaural Speech Enhancement, [Tan](https://github.com/JupiterEthan). [[Paper]](https://web.cse.ohio-state.edu/~wang.77/papers/Tan-Wang.taslp20.pdf) [[GCRN]](https://github.com/JupiterEthan/GCRN-complex)
+  * 2020, Learning Complex Spectral Mapping With Gated Convolutional Recurrent Networks for Monaural Speech Enhancement, [Tan](https://github.com/JupiterEthan). [[Paper]](https://web.cse.ohio-state.edu/~wang.77/papers/Tan-Wang.taslp20.pdf) [[GCRN]](https://github.com/JupiterEthan/GCRN-complex)
         * 可视化：相位谱+平滑 vs 非平滑
         * Gated
+        * CRN：Complex Spectral Mapping with a Convolutional Recurrent Network for Monaural Speech Enhancement，
   * 2020, DCCRN: Deep Complex Convolution Recurrent Network for Phase-AwareSpeech Enhancement, [Hu](https://github.com/huyanxin). [[Paper]](https://isca-speech.org/archive/Interspeech_2020/pdfs/2537.pdf) [[DCCRN]](https://github.com/huyanxin/DeepComplexCRN)
         * 参考模块
               * ConvSTFT
@@ -94,6 +95,7 @@ https://github.com/topics/beamforming
               * SI-SNR
   * 2020, T-GSA: Transformer with Gaussian-Weighted Self-Attention for Speech Enhancement, Kim. [[Paper]](https://ieeexplore.ieee.org/document/9053591) 
   * 2020, Phase-aware Single-stage Speech Denoising and Dereverberation with U-Net, Choi. [[Paper]](https://arxiv.org/abs/2006.00687)
+  * [[2106.08672\] DCCRN+: Channel-wise Subband DCCRN with SNR Estimation for Speech Enhancement (arxiv.org)](https://arxiv.org/abs/2106.08672)
 
 ### attention
 
@@ -118,6 +120,7 @@ https://github.com/topics/beamforming
   - We observe that the final layer attention mask has an interpretation as a soft Voice Activity Detector   
   - time domain UNet-wave
 - DF-CONFORMER：[2106.15813.pdf (arxiv.org)](https://arxiv.org/pdf/2106.15813.pdf)
+- Complex Spectral Mapping With Attention Based Convolution Recurrent Neural Network for Speech Enhancement：[2104.05267.pdf (arxiv.org)](https://arxiv.org/pdf/2104.05267.pdf)
 
 ### loss
 

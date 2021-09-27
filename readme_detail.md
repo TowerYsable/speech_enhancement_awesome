@@ -20,7 +20,7 @@
 
 主要分为传统的语音增强算法和基于深度学习 的语音增强算法
 
-- 传统的
+- 传统的（含噪信号是高能信号与低能噪声叠加的信号，可以通过傅里叶变换的频域滤波实现降噪。）
   - 谱减法
   - 维纳滤波
 - 深度学习的（目前的工作主要在网络模型、输入特征和训练目标三个方向进行优化，在训练目标的研究中，多目标学习是被研究的方向之一。  ）
@@ -137,7 +137,57 @@
 ## 二、 complex domain
 
 - 过去：只对语音的幅值谱进行了处理而忽略了相位的作用。  早期主要是使用幅度谱，重构语音信号的时候使用的是噪声的相位谱。从而使语音增强的性能存在一定的上限，但是相位的建模确实是具有挑战性的，难以直接预测出纯净语音的相位谱。
-- encoder-decoder：在保证帧与帧之间独立的同时又可以提取到相邻频点之间的特征信息  
+- encoder-decoder：在保证帧与帧之间独立的同时又可以提取到相邻频点之间的特征信息
+
+### 2.1 
+
+- paper：2017, Complex spectrogram enhancement by convolutional neural network with multi-metrics learning, [Fu](https://github.com/JasonSWFu). [[Paper]](https://arxiv.org/pdf/1704.08504.pdf)
+
+- 解决的问题：
+
+  - 问题一：the difficulty of phase estimations
+
+    - estimating clean real and imaginary (RI) spectrograms from noisy ones.
+
+    - 从不同的channel进行实部和虚部的计算。Rather than processing the phase directly, the network aims to estimate clean RI spectrograms from  noisy ones.   
+
+      <img src="readme_detail.assets/image-20210927104059377.png" alt="image-20210927104059377" style="zoom: 50%;" />  
+
+  - 问题二：a single objective function cannot consider multiple metrics simulataneously
+
+    - log-power spectrogram (LPS)  
+    - segmental signal-to-noise ratio (SSNR)   
+
+- 相位与幅度之间的不同
+
+  - 高信噪比的条件下，使用噪声相位信息可以得到很好的增强效果，因为噪声相位和干净语音的相位相似。$\arctan\frac{N_i}{N_r} = \arctan \frac{S_i+n_i}{S_r+n_r}$，具体推导见论文
+  - 低信噪比的条件下，相位信息丢失严重
+
+  <img src="readme_detail.assets/image-20210927102700549.png" alt="image-20210927102700549" style="zoom:50%;" />
+
+- 实验：
+
+  - 数据集：TIMIT + 5种噪声
+  - 对比不同相位在不同SNR条件下
+  - 对比不同的baseline
+
+> 因为高频意味着高的短时平均过零率，低频意味着低的短时平均过零率，所以浊音时具有较低的过零率，而清音时具有较高的过零率。
+>
+> 1. 利用短时平均过零率可以从背景噪声中找出语音信号，
+> 2. 可以用于判断寂静无话段与有话段的起点和终止位置。
+> 3. 在背景噪声较小的时候，用平均能量识别较为有效，在背景噪声较大的时候，用短时平均过零率识别较为有效。
+
+### 2.2 
+
+- paper：2017, Time-Frequency Masking in the Complex Domain for Speech Dereverberation and Denoising, Williamson. [[Paper]](https://ieeexplore.ieee.org/abstract/document/7906509)
+- 任务：monaural speech separation in reverberant and noisy environments.   
+- 问题：
+  - is limited since they only enhance the magnitude response, and use reverberant and **noisy phase** during signal reconstruction.  
+    - we enhance the magnitude and phase by performing separation with an estimate of the complex ideal ratio mask.   （cIRM）
+    - This approach jointly enhances the magnitude and phase response of noisy speech by estimating the complex ideal ratio mask (cIRM) in the real and imaginary domains.   
+    - we propose to use DNNs to learn a mapping from reverberant (and noisy) speech to the cIRM.  
+- 实验：
+  - 针对混响，using simulated and real room   
 
 ## 三、 attention
 
@@ -156,21 +206,160 @@
 
     <img src="readme_detail.assets/image-20210926113838225.png" alt="image-20210926113838225" style="zoom: 67%;" />
 
+  > - 需要训练有素的听众
+  > - 需要消耗更多的时间成本和人力成本
+  > - 测听者受多种因素影响，容易影响到主观评价结果，如个体受试者的偏好和实验的环境(其他条件)。
+
 - 客观评价指标
 
-  - PESQ，Perceptual Evaluation of Speech Qualify，语音质量感知估计。[-0.5,4.5]，使用于大多数环境，与人的主观评估标准比较接近，侧重于语音清晰度。
+  - PESQ，Perceptual Evaluation of Speech Qualify，语音质量感知估计。[-0.5,4.5]，使用于大多数环境，与人的主观评估标准比较接近，侧重于**语音清晰度。**
 
     ![image-20210926114055610](readme_detail.assets/image-20210926114055610.png)
 
-  - STOI，Short Time Objective Intelligently，短时客观可懂度。[0,1]，语音可懂度，在低信噪比条件下，听懂语音内容比听清语音更有意义。
+    > PESQ算法没有提供传输质量的综合评估。它只测量单向语音失真和噪声对语音质量的影响。响度损失、延迟、侧音、回声和其他与双向互动相关的损伤(如中央削波器)的影响不会反映在PESQ分数中。因此，有可能有很高的PESQ分数，但整体连接质量很差。
+
+  - STOI，Short Time Objective Intelligently，短时客观可懂度。[0,1]，语音可懂度，在低信噪比条件下，听懂语音内容比听清语音更有意义。**（基于清晰度指数）**
 
     ![image-20210926114453315](readme_detail.assets/image-20210926114453315.png)
 
   - segSNR，Segmental SNR，分段信噪比。语音具有非平稳性，相对于短时平稳而言，根据能量集中的范围可以将它分为搞高能量和低能量区域，不同能量区域对于理解语音的重要性也是不同的，因此需要分段进行计算。
-
+  
     <img src="readme_detail.assets/image-20210926114635700.png" alt="image-20210926114635700" style="zoom:67%;" />
+    $$
+    x(n) ：原始(干净)信号
+    x^{(n)}：增强信号
+    N：帧长
+  M：信号中的帧数量
+    $$
+  
+    > SNRseg有一个潜在问题，语音信号(在会话语音中非常丰富)在安静期间的信号能量非常小，导致较大的负SNRseg值，这将使整体评估出现偏差。为了解决这一问题可以使用VAD检测的方法在只有语音段才计算信噪比。另外一种方法就是限制信噪比在一定范围内如[-10, 35dB]这样就不需要额外进行VAD检测。
+    >
+    > 后续研究通过将 log 函数移动 1 提出了分段 SNR 的不同定义，这样做可以避免在沉默(silent)语音帧期间获得大的负值的可能性。 因为SNRseg_R的最小可值现在为零而不是负无穷大。 上述分段 SNR 定义的主要优点是它避免了对语音和无语音帧进行显式标记的需要。 即：
+  >
+    > <img src="readme_detail.assets/image-20210927111242390.png" alt="image-20210927111242390" style="zoom:50%;" />
 
   - LSD，Log Spectral Distance，对数谱失真度。
+  
+  - SNR：有用信号功率与噪声功率的比（此处功率为平均功率），也等于幅度比的平方
+    $$
+  SNR(dB)=10log){10}\frac{∑^{N−1}_{n=0}s^2(n)}{∑^{N−1}_{n=0}d^2(n)}=10∗log_{10}(\frac {P_{signal} }{P_{noise}})=20∗log_{10}(\frac{A_{signal}}{A_{noise}})
+    $$
+  
+    $$
+  SNR(dB)=10\log_{10}\frac {∑{N−1}_{n=0}s^2(n) }{∑_{N−1}^{n=0}[x(n)−s(n)]^2}
+    $$
+  
+    $$
+  P_{signal}：信号功率（平均功率或者实际功率）功率等于幅度值的平方；
+    $$
+  
+    $$
+  P_{noise}：噪声功率
+    $$
+  
+    $$
+  A_{signal}：信号幅度
+    $$
+  
+    $$
+  A_{noise}：噪声幅度值
+    $$
+  
+  - fwSNRseg：频率加权分段信噪比（Frequency-weighted Segmental SNR，fwSNRseg）与SegSNR相似，只是在频带上增加了一个平均。频带与耳朵的临界频带成正比。FWSSNR可定义为：
+    
+    - 与时域 SNRseg相比，fwSNRseg 可以为频谱的不同频段设置不同权重。 在选择感知动机(motivated)的频率间隔方面（例如临界频带间隔）也具有灵活性。
+    
+    - <img src="readme_detail.assets/image-20210927142311324.png" alt="image-20210927142311324" style="zoom:50%;" />
+      
+      - $W_j$：第j个频带的权重
+      - K：频带的数量
+      - M：信号的帧数
+      - $X(j,m)$：纯净信号在第j个频带第m帧处的滤波器组 幅值(amplitude) （第m帧第j个频带经过高斯形窗加权的干净信号频谱）
+      - $X*(j,m)$：同一频带增强信号的滤波器组 幅值(amplitude)
+      
+    - ```
+      import pysepm
+      fwSNRseg = pysepm.fwSNRseg(clean_speech, enhanced_speech, fs)
+      ```
+  
+  - PSNR
+  
+    - 表示信号的最大瞬时功率和噪声功率的比值，最大瞬时功率为语音数据中最大值得平方。
+  
+    - ```
+      def psnr(label, logits):
+          MAX = np.max(label) ** 2  # 信号的最大平时功率
+          MSE = np.mean((label - logits) ** 2)
+          return np.log10(MAX / MSE)
+      ```
+  
+  > - [pesq库](https://github.com/ludlows/python-pesq)： pip install pesq 
+  > - [pysepm库](https://github.com/schmiph2/pysepm)：pip install https://github.com/schmiph2/pysepm/archive/master.zip 
+  > - [pystoi 库](https://github.com/mpariente/pystoi)：pip install pystoi 
+  > - [语音主观和客观评价总结与实现 - 凌逆战 - 博客园 (cnblogs.com)](https://www.cnblogs.com/LXP-Never/p/11071911.html)
+
+## 七、 基于神经网络的语音质量度量(deep Queality)
+
+### 7.1 AutoMOS
+
+[2016_AutoMOS: Learning a non-intrusive assessor of naturalness-of-speech](https://arxiv.org/abs/1611.09207)
+
+
+
+### 7.2 QuealityNet
+
+paper：[2018_Quality-Net: An End-to-End Non-intrusive Speech Quality Assessment Model based on BLSTM](https://arxiv.org/abs/1808.05344)
+
+code：https://github.com/JasonSWFu/Quality-Net
+
+### 7.3 NISQA
+
+- paper：
+  - [2019_Non-intrusive speech quality assessment for super-wideband speech communication networks](https://ieeexplore.ieee.org/document/8683770)（older NISQA (v0.42)）
+  - [2020_Deep Learning Based Assessment of Synthetic Speech Naturalness](https://www.isca-speech.org/archive/Interspeech_2020/abstracts/2382.html)（NISQA-TTS）
+  - [2020_Full-reference speech quality estimation with attentional Siamese neural networks](https://ieeexplore.ieee.org/document/9053951)（double-ended NISQA model）
+  - [2021_NISQA: A Deep CNN-Self-Attention Model for Multidimensional Speech Quality Prediction with Crowdsourced Datasets](https://arxiv.org/abs/2104.09494)（NISQA model or the NISQA Corpus）
+- code：https://github.com/gabrielmittag/NISQA
+
+- 作用：估计超宽带质量。
+  - 近年来，通过将可用音频带宽从窄带扩展到宽带，再到超宽带，语音通信网络的质量得到了显著提高。
+  - 这种带宽扩展标志着我们从普通的老式电话服务中所知道的典型的沉闷声音的结束。提高语音质量的另一个原因是全数字分组传输。
+- 版本对比：
+  - 在老版本中：该模型主要用于预测超宽带语音传输的质量。能够准确预测Opus、EVS等现代编解码器的丢包隐藏质量影响。
+  - 在新版本中：模型添加了 影响语音质量的四个维度(噪声、着色(Coloration)、不连续和响度 )的客观评价
+
+### 7.4 MOSNet
+
+- 【论文】[2019_MOSNet: Deep Learning based Objective Assessment for Voice Conversion](https://arxiv.org/abs/1904.08352)
+- 【代码】https://github.com/aliutkus/speechmetrics（提供了多种度量方法，如：MOSNet、SRMR、BSSEval、PESQ、STOI、SISDR）
+- 【代码】https://github.com/lochenchou/MOSNet
+- 【关键字】有参考、评估**音色转换**后的语音质量
+
+### 7.5 DNSMOS
+
+- 【文献】[2020_DNSMOS: A Non-Intrusive Perceptual Objective Speech Quality metric to evaluate Noise Suppressors](https://www.microsoft.com/en-us/research/publication/dnsmos-a-non-intrusive-perceptual-objective-speech-quality-metric-to-evaluate-noise-suppressors/)
+- 【代码】https://github.com/microsoft/DNS-Challenge/tree/master/DNSMOS
+
+###  7.6 DPAM
+
+- 【文献】[2020_A Differentiable Perceptual Audio Metric Learned from Just Noticeable Differences](http://www.interspeech2020.org/uploadfile/pdf/Wed-2-9-4.pdf)
+- 【文献】[2021_CDPAM: Contrastive learning for perceptual audio similarity](https://arxiv.org/abs/2102.05109)
+- 【代码】https://github.com/pranaymanocha/PerceptualAudio
+- 【关键字】有参考，评估感知语音质量
+- 优势：
+  - 通过主观成对比较来衡量，简单地用我们的度量替换现有损失（例如，深度特征损失）可以显着改善去噪网络。
+- CDPAM：
+  - 一种基于对比学习的多维深度感知音频相似度度量 (CDPAM)是一种建立在 DPAM 基础上并对其进行改进的指标。使用三个关键思想：(1) 对比学习、(2) 多维表示学习、(3) 三元组学习。
+    - 对比学习是一种自我监督学习的形式，它用合成（因此是无限的）数据来增强一组有限的人类注释：对应该被视为不同（或不相同）的数据的扰动。
+    - 我们使用多维表示学习来分别建模内容相似性（例如说话者或话语之间）和声学相似性（例如录音环境之间）。
+    - 对比学习和多维表示学习的结合使 CDPAM 能够更好地概括具有有限人类注释的内容差异（例如看不见的说话者）。
+    - 为了进一步提高对大扰动（远远超出 JND）的鲁棒性，我们收集了基于三元组比较的判断数据集，询问受试者：A 还是 B 更接近参考 C？
+
+### 7.7 MBNet
+
+- 【论文】[2021_MBNET: MOS Prediction for Synthesized Speech with Mean-Bias Network](https://ieeexplore.ieee.org/abstract/document/9413877/)
+- 【代码】https://github.com/sky1456723/Pytorch-MBNet
+- 一个具有平均子网和偏置子网的 MOS 预测器，以更好地利用 MOS 数据集中的每个判断分数，其中平均子网用于预测每个话语的平均分数，类似于以前的工作，和偏差子网来预测偏差分数（平均分数和每个评委得分之间的差异）并捕捉每个评委的个人偏好。
 
 ## 六、 数据集
 
@@ -255,4 +444,6 @@
 - Matlab实现：[PandoraLS/traditional-speech-enhancement: 语音增强传统方法 (github.com)](https://github.com/PandoraLS/traditional-speech-enhancement)
 - [语音增强国外牛人_audio_algorithm的博客-CSDN博客](https://blog.csdn.net/audio_algorithm/article/details/79114020)
 - 视频：[视频回放丨AI技术沙龙—语音增强 (qq.com)](https://mp.weixin.qq.com/s/TUSBZXCm0M0-lYZYgCttWg)
+- [语音主观和客观评价总结与实现 - 凌逆战 - 博客园 (cnblogs.com)](https://www.cnblogs.com/LXP-Never/p/11071911.html)
+- [语音信号处理 - 随笔分类 - 凌逆战 - 博客园 (cnblogs.com)](https://www.cnblogs.com/LXP-Never/category/1408262.html)
 

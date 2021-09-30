@@ -626,6 +626,10 @@ code：https://github.com/JasonSWFu/Quality-Net
   - 针对不同的场景
 - DCCRN
   - 过度抑制
+- attention
+  - Complex domain 3：然而，简单地叠加带有小核的几个二维卷积层并不能捕获这种全局相关性
+- 相位难以估计，过去常用的是基于噪声相位的，但是这个可以使用“对比学习”的方式，对比预测的和纯净的phase之间的相似度，越相似越好。（phase prediction  ）
+  - Complex domain 3
 
 ## 参考论文
 

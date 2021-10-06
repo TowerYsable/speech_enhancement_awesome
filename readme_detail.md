@@ -628,8 +628,24 @@ code：https://github.com/JasonSWFu/Quality-Net
   - 过度抑制
 - attention
   - Complex domain 3：然而，简单地叠加带有小核的几个二维卷积层并不能捕获这种全局相关性
+  - 避免丢帧
 - 相位难以估计，过去常用的是基于噪声相位的，但是这个可以使用“对比学习”的方式，对比预测的和纯净的phase之间的相似度，越相似越好。（phase prediction  ）
   - Complex domain 3
+
+## 实验
+
+- 对比学习loss
+  - 多目标loss
+    - 过去的单目标优化存在的问题
+      - 幅度预测可能会丢失有用的信息
+      - 相位预测可能会出现全为0的情况
+    - 多目标单纯使用一个权值参数，模型性能对权重选择非常敏感
+      - 使用sigmoid来衡量同方差不确定性，同方差不确定性和人物有关，同方差不确定性越高的人物则意味着模型人物相关的输出的噪声越多，任务越难以学习。
+- attention
+
+
+
+> [深度学习多目标优化的多个loss应该如何权衡 (qq.com)](https://mp.weixin.qq.com/s/swwe35lVN6A9m1cgtY6ftg)
 
 ## 参考论文
 

@@ -55,24 +55,4 @@ if __name__ == "__main__":
                     sf.write(noisy_file,noisy_data,fs)
                     f.write('%s %s\n'%(noisy_file,clean_file))
                     # print('%s %s\n'%(noisy_file,clean_file))
-                    
-            
-            
-            
-            
-            
-            
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
    

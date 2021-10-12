@@ -358,40 +358,41 @@
 
 - DCCRN+
 
-  ![image-20210927152225631](readme_detail.assets/image-20210927152225631.png)
+  <img src="readme_detail.assets/image-20210927152225631.png" alt="image-20210927152225631" style="zoom:150%;" />
 
   - subband processing
 
     - Learnable subband and split and merge moudules to reduce model size and computational cost，实现了降采样的过程，语音里面的低频部分能量比较高（谐波成分比较明显），高频部分的能量比较低，但是是类噪的，因此高频的降噪是具有挑战的
     - neural network based learnable subband split and merge
       - split block
-      - merge block
-
-  - **Complex TF-LSTM Block**  --> attention是都能够继续改进 
-
-    <img src="readme_detail.assets/image-20210927152240809.png" alt="image-20210927152240809" style="zoom:50%;" />
-
+      - 
+    - merge block
+  
+- **Complex TF-LSTM Block**  --> attention是都能够继续改进 
+  
+  <img src="readme_detail.assets/image-20210927152240809.png" alt="image-20210927152240809" style="zoom:50%;" />
+  
     - Modeling frequency domain sequence and time domain sequence
-    - 先频域建模，在时域建模，可见论文模块b
-
-  - Convolution pathway
-
-    - aggregate richer information from encoder output
-
-  - SNR Esinmator
-
+  - 先频域建模，在时域建模，可见论文模块b
+  
+- Convolution pathway
+  
+  - aggregate richer information from encoder output
+  
+- SNR Esinmator
+  
     - SNR estimation as MTL to maintain good speech quality while reducing noise
     - Problem：directly training neural noise suppressor --> certain amount of speech distortion
     - solution:add frame-level SNR estimator under MTL framework
       - network:1 LSTM + 1 Conv1D w/ sigmoid
       - label
         - extract the amplitude spectrum after STFT
-        - Calcalate the log energy of noise and speech based on amplitude spectrum
-
-  - post-processing
-
-    - remove residual noise
-
+      - Calcalate the log energy of noise and speech based on amplitude spectrum
+  
+- post-processing
+  
+  - remove residual noise
+  
   - https://imybo.github.io/dccrn-plus
 
 ### 2.7 
@@ -641,7 +642,20 @@ code：https://github.com/JasonSWFu/Quality-Net
       - 相位预测可能会出现全为0的情况
     - 多目标单纯使用一个权值参数，模型性能对权重选择非常敏感
       - 使用sigmoid来衡量同方差不确定性，同方差不确定性和人物有关，同方差不确定性越高的人物则意味着模型人物相关的输出的噪声越多，任务越难以学习。
+  
 - attention
+
+- super Gaussian
+
+  - super-Gaussian priors allow for a reduction of noise between speech spectral harmonics which is not achievable using Gaussian estimators such as the Wiener filter.  
+  - A listening experiment and instrumental measures confirm that while super-Gaussian priors yield only moderate improvements for classic enhancement schemes, for MLSE-based approaches super-Gaussian priors clearly make an important difference and significantly outperform Gaussian priors.  
+  - 对比了gaussain和super gaussian
+
+  > 论文：super gaussain
+
+- 怎么减少时间复杂度
+
+  >  论文：GOE math
 
 
 
@@ -708,3 +722,14 @@ code：https://github.com/JasonSWFu/Quality-Net
 - [语音主观和客观评价总结与实现 - 凌逆战 - 博客园 (cnblogs.com)](https://www.cnblogs.com/LXP-Never/p/11071911.html)
 - [语音信号处理 - 随笔分类 - 凌逆战 - 博客园 (cnblogs.com)](https://www.cnblogs.com/LXP-Never/category/1408262.html)
 
+
+
+
+
+
+
+联邦学习 --> 语音识别
+
+裁剪
+
+指令集优化

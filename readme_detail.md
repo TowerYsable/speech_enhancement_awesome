@@ -454,7 +454,9 @@
 
 - 客观评价指标
 
-  - PESQ，Perceptual Evaluation of Speech Qualify，语音质量感知估计。[-0.5,4.5]，使用于大多数环境，与人的主观评估标准比较接近，侧重于**语音清晰度。**
+  - PESQ，Perceptual Evaluation of Speech Qualify，语音质量感知估计。[-0.5,4.5]，使用于大多数环境，与人的主观评估标准比较接近
+
+  - ，侧重于**语音清晰度。**
 
     ![image-20210926114055610](readme_detail.assets/image-20210926114055610.png)
 
@@ -463,7 +465,7 @@
   - STOI，Short Time Objective Intelligently，短时客观可懂度。[0,1]，语音可懂度，在低信噪比条件下，听懂语音内容比听清语音更有意义。**（基于清晰度指数）**
 
     ![image-20210926114453315](readme_detail.assets/image-20210926114453315.png)
-
+  
   - segSNR，Segmental SNR，分段信噪比。语音具有非平稳性，相对于短时平稳而言，根据能量集中的范围可以将它分为搞高能量和低能量区域，不同能量区域对于理解语音的重要性也是不同的，因此需要分段进行计算。
   
     <img src="readme_detail.assets/image-20210926114635700.png" alt="image-20210926114635700" style="zoom:67%;" />
@@ -477,34 +479,34 @@
     > SNRseg有一个潜在问题，语音信号(在会话语音中非常丰富)在安静期间的信号能量非常小，导致较大的负SNRseg值，这将使整体评估出现偏差。为了解决这一问题可以使用VAD检测的方法在只有语音段才计算信噪比。另外一种方法就是限制信噪比在一定范围内如[-10, 35dB]这样就不需要额外进行VAD检测。
     >
     > 后续研究通过将 log 函数移动 1 提出了分段 SNR 的不同定义，这样做可以避免在沉默(silent)语音帧期间获得大的负值的可能性。 因为SNRseg_R的最小可值现在为零而不是负无穷大。 上述分段 SNR 定义的主要优点是它避免了对语音和无语音帧进行显式标记的需要。 即：
-  >
+>
     > <img src="readme_detail.assets/image-20210927111242390.png" alt="image-20210927111242390" style="zoom:50%;" />
 
   - LSD，Log Spectral Distance，对数谱失真度。
   
   - SNR：有用信号功率与噪声功率的比（此处功率为平均功率），也等于幅度比的平方
     $$
-  SNR(dB)=10log){10}\frac{∑^{N−1}_{n=0}s^2(n)}{∑^{N−1}_{n=0}d^2(n)}=10∗log_{10}(\frac {P_{signal} }{P_{noise}})=20∗log_{10}(\frac{A_{signal}}{A_{noise}})
+    SNR(dB)=10log){10}\frac{∑^{N−1}_{n=0}s^2(n)}{∑^{N−1}_{n=0}d^2(n)}=10∗log_{10}(\frac {P_{signal} }{P_{noise}})=20∗log_{10}(\frac{A_{signal}}{A_{noise}})
     $$
   
     $$
-  SNR(dB)=10\log_{10}\frac {∑{N−1}_{n=0}s^2(n) }{∑_{N−1}^{n=0}[x(n)−s(n)]^2}
+    SNR(dB)=10\log_{10}\frac {∑{N−1}_{n=0}s^2(n) }{∑_{N−1}^{n=0}[x(n)−s(n)]^2}
     $$
   
     $$
-  P_{signal}：信号功率（平均功率或者实际功率）功率等于幅度值的平方；
+    P_{signal}：信号功率（平均功率或者实际功率）功率等于幅度值的平方；
     $$
   
     $$
-  P_{noise}：噪声功率
+    P_{noise}：噪声功率
     $$
   
     $$
-  A_{signal}：信号幅度
+    A_{signal}：信号幅度
     $$
   
     $$
-  A_{noise}：噪声幅度值
+    A_{noise}：噪声幅度值
     $$
   
   - fwSNRseg：频率加权分段信噪比（Frequency-weighted Segmental SNR，fwSNRseg）与SegSNR相似，只是在频带上增加了一个平均。频带与耳朵的临界频带成正比。FWSSNR可定义为：
@@ -527,14 +529,14 @@
   - PSNR
   
     - 表示信号的最大瞬时功率和噪声功率的比值，最大瞬时功率为语音数据中最大值得平方。
-  
+    
     - ```
       def psnr(label, logits):
           MAX = np.max(label) ** 2  # 信号的最大平时功率
           MSE = np.mean((label - logits) ** 2)
           return np.log10(MAX / MSE)
       ```
-  
+
   > - [pesq库](https://github.com/ludlows/python-pesq)： pip install pesq 
   > - [pysepm库](https://github.com/schmiph2/pysepm)：pip install https://github.com/schmiph2/pysepm/archive/master.zip 
   > - [pystoi 库](https://github.com/mpariente/pystoi)：pip install pystoi 
